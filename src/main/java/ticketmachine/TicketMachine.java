@@ -12,7 +12,7 @@ public class TicketMachine {
 	// The price of a ticket from this machine.
 	private final int price;
 	// The amount of money entered by a customer so far.
-	private int balance;
+	private int balance = 0;
 	// The total amount of money collected by this machine.
 	private int total;
 
@@ -27,8 +27,7 @@ public class TicketMachine {
 			throw new IllegalArgumentException("Ticket price must be positive");
 		}
 		price = ticketCost;
-		balance = 0;
-		total = 0;
+        total = 0;
 	}
 
 	/**
@@ -63,6 +62,9 @@ public class TicketMachine {
 	 * @throws IllegalArgumentException if amount is not positive
 	 */
 	public void insertMoney(int amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Amount must be positive");
+		}
 		balance = balance + amount;
 	}
 
@@ -72,9 +74,11 @@ public class TicketMachine {
 	 * @return the balance
 	 */
 	public int refund() {
-		System.out.println("Je vous rends : " + balance + " centimes");
-		return balance;
-	}
+		int remboursement=balance;
+		this.balance=0;
+		System.out.println("Je vous rends : " + remboursement + " centimes");
+       	return remboursement;
+    }
 
 	/**
 	 * Print a ticket. Update the total collected and reduce the balance 
@@ -82,6 +86,16 @@ public class TicketMachine {
 	 * @return vrai si le ticket a été imprimé, faux sinon
 	 */
 	public boolean printTicket() {
+
+		if (balance<price) {
+			return false;
+		}
+
+		// Diminuer la balance quand on imprime
+		balance=balance-price;
+
+		total=total+price;
+
 		// Simulate the printing of a ticket.
 		System.out.println("##################");
 		System.out.println("# The BlueJ Line");
@@ -90,5 +104,6 @@ public class TicketMachine {
 		System.out.println("##################");
 		System.out.println();
 		return true;
+
 	}
 }
